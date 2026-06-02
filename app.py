@@ -543,6 +543,11 @@ except:
 # PREPROCESSING
 # ─────────────────────────────────────────────
 raw_df = pd.read_csv(uploaded_file)
+MAX_ROWS = 1000
+
+if len(raw_df) > MAX_ROWS:
+    st.warning(f"Large file detected. Using first {MAX_ROWS} rows for live demo.")
+    raw_df = raw_df.head(MAX_ROWS)
 df = raw_df.copy()
 
 account_ids = df["Unnamed: 0"] if "Unnamed: 0" in df.columns else pd.Series(range(len(df)))
@@ -800,9 +805,9 @@ with tab3:
     col3.metric("Missing Values", f"{raw_df.isnull().sum().sum():,}")
 
     st.markdown('<div class="sec-heading">Column Summary</div>', unsafe_allow_html=True)
-    summary = raw_df.describe(include="all").T.reset_index()
-    summary.columns = ["Feature"] + list(summary.columns[1:])
-    st.dataframe(summary, use_container_width=True, height=300)
+    # summary = raw_df.describe(include="all").T.reset_index()
+    # summary.columns = ["Feature"] + list(summary.columns[1:])
+    # st.dataframe(summary, use_container_width=True, height=300)
 
 
 # ── Tab 4 · Explainability ──────────────────
